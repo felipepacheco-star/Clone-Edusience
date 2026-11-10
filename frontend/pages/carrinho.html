@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carrinho de Compras - EduScience</title>
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/carrinho.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <h1>EduScience</h1>
+      </div>
+      <nav>
+        <a href="landing.html">Início</a>
+        <a href="carrinho.html" class="active">Carrinho</a>
+        <a href="login.html">Entrar</a>
+      </nav>
+    </header>
+
+    <main class="cart-page">
+      <div class="cart-header">
+        <h2>Seu Carrinho</h2>
+        <span class="cart-count">(0 itens)</span>
+      </div>
+
+      <div class="cart-layout">
+        <section class="cart-items">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+                <th>Subtotal</th>
+                <th><span class="visually-hidden">Ações</span></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <aside class="cart-summary">
+          <h3>Resumo do Pedido</h3>
+          <dl class="summary-list">
+            <div class="summary-row">
+              <dt>Subtotal</dt>
+              <dd id="cart-subtotal">R$ 0,00</dd>
+            </div>
+            <div class="summary-row summary-total">
+              <dt>Total</dt>
+              <dd id="cart-total">R$ 0,00</dd>
+            </div>
+          </dl>
+
+          <div class="summary-actions">
+            <button type="button" class="btn btn-primary">Finalizar Compra</button>
+            <a href="landing.html" class="btn-link">Continuar comprando</a>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <script src="../js/carrinho.js"></script>
+  </body>
+</html>

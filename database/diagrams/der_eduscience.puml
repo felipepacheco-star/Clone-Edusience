@@ -1,0 +1,147 @@
+@startuml DER_EduScience
+
+title Diagrama Entidade-Relacionamento (DER/MER) - EduScience
+
+hide circle
+skinparam linetype ortho
+skinparam shadowing false
+skinparam roundcorner 10
+skinparam entity {
+  BackgroundColor White
+  BorderColor #24476B
+  FontColor #14213D
+  HeaderBackgroundColor #F0F4F8
+}
+skinparam ArrowColor #24476B
+skinparam NoteBackgroundColor #FEFECE
+
+entity "CLIENTE" as cliente {
+  * id_cliente : INT <<PK>>
+  --
+  * nome_escola : VARCHAR(150)
+  * cnpj_cpf : VARCHAR(18)
+  * email : VARCHAR(100)
+  * telefone : VARCHAR(20)
+  * data_cadastro : DATETIME
+}
+
+entity "CADASTRO" as cadastro {
+  * id_cadastro : INT <<PK>>
+  --
+  * id_cliente : INT <<FK>>
+  * logradouro : VARCHAR(255)
+  * numero : VARCHAR(10)
+    complemento : VARCHAR(100)
+  * bairro : VARCHAR(100)
+  * cidade : VARCHAR(100)
+  * estado : CHAR(2)
+  * cep : VARCHAR(9)
+}
+
+entity "LOGIN" as login {
+  * id_login : INT <<PK>>
+  --
+  * id_cliente : INT <<FK>>
+  * usuario : VARCHAR(50)
+  * senha_hash : VARCHAR(255)
+    ultimo_acesso : DATETIME
+  * ativo : BOOLEAN
+}
+
+entity "CONSULTA" as consulta {
+  * id_consulta : INT <<PK>>
+  --
+  * id_cliente : INT <<FK>>
+  * assunto : VARCHAR(100)
+  * mensagem : TEXT
+  * data_envio : DATETIME
+  * status : VARCHAR(20)
+}
+
+entity "PRODUTO" as produto {
+  * id_produto : INT <<PK>>
+  --
+  * sku : VARCHAR(50)
+  * nome_kit : VARCHAR(150)
+    descricao : TEXT
+  * categoria : VARCHAR(50)
+  * preco : DECIMAL(10,2)
+  * estoque : INT
+  * ativo : BOOLEAN
+}
+
+entity "CARRINHO_DE_COMPRA" as carrinho_de_compra {
+  * id_carrinho : INT <<PK>>
+  --
+  * id_cliente : INT <<FK>>
+  * id_produto : INT <<FK>>
+  * quantidade : INT
+  * data_atualizacao : DATETIME
+}
+
+entity "COMPRA" as compra {
+  * id_compra : INT <<PK>>
+  --
+  * id_cliente : INT <<FK>>
+  * data_compra : DATETIME
+  * valor_frete : DECIMAL(10,2)
+  * valor_total : DECIMAL(10,2)
+  * status_pedido : VARCHAR(50)
+  * metodo_pagamento : VARCHAR(50)
+}
+
+entity "VENDA" as venda {
+  * id_venda : INT <<PK>>
+  --
+  * id_compra : INT <<FK>>
+  * id_produto : INT <<FK>>
+  * quantidade : INT
+  * preco_unitario : DECIMAL(10,2)
+  * subtotal : DECIMAL(10,2)
+}
+
+entity "NOTA_FISCAL" as nota_fiscal {
+  * id_nota_fiscal : INT <<PK>>
+  --
+  * id_compra : INT <<FK>>
+  * numero_nf : VARCHAR(50)
+  * serie : VARCHAR(10)
+  * chave_acesso : VARCHAR(44)
+  * data_emissao : DATETIME
+    xml_url : VARCHAR(255)
+}
+
+cliente -down-> cadastro
+cliente -down-> login
+cliente -down-> consulta
+cliente -right-> carrinho_de_compra
+cliente -right-> compra
+
+carrinho_de_compra -down-> produto
+compra -down-> venda
+compra -right-> nota_fiscal
+venda -left-> produto
+
+cliente ||--|| cadastro : possui
+cliente ||--|| login : autentica
+cliente ||--o{ consulta : realiza
+cliente ||--o{ carrinho_de_compra : mantem
+cliente ||--o{ compra : realiza
+
+produto ||--o{ carrinho_de_compra : adicionado_em
+compra ||--|{ venda : contem
+produto ||--o{ venda : faturado_em
+compra ||--o| nota_fiscal : gera
+
+legend bottom
+  |= Símbolo |= Significado |
+  | * | Campo Obrigatório (NOT NULL) |
+  | PK | Chave Primária |
+  | FK | Chave Estrangeira |
+  | ||--|| | Relacionamento 1 para 1 |
+  | ||--o| | Relacionamento 1 para 0..1 |
+  | ||--o{ | Relacionamento 1 para 0..N |
+  | ||--|{ | Relacionamento 1 para 1..N |
+endlegend
+
+@enduml
